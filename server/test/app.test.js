@@ -1,8 +1,11 @@
 const request = require('supertest');
-const app = require('../app');
+const { app, server } = require('../app'); 
 
 describe('Integration Tests', () => {
-  
+  afterAll((done) => {
+    server.close(done); 
+  });
+
   test('should serve the docs.html file at /docs', async () => {
     const res = await request(app).get('/docs');
     expect(res.status).toBe(200);
@@ -22,5 +25,4 @@ describe('Integration Tests', () => {
     expect(res.headers['content-type']).toMatch(/json/);
     expect(Array.isArray(res.body)).toBe(true);
   });
-
 });
