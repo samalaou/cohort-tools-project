@@ -1,4 +1,4 @@
-const Cohort = require('../models/Cohort.model');
+const Cohort = require('../src/models/Cohort.model');
 
 describe('Cohort Model Test', () => {
   it('should create and save a cohort successfully', async () => {

@@ -1,7 +1,7 @@
 const request = require('supertest');
-const { app } = require('../app');
-const Student = require('../models/Student.model');
-const Cohort = require('../models/Cohort.model');
+const { app } = require('../src/app');
+const Student = require('../src/models/Student.model');
+const Cohort = require('../src/models/Cohort.model');
 
 describe('Student Routes', () => {
   let cohort;

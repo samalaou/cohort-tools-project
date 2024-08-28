@@ -1,6 +1,6 @@
 const request = require('supertest');
-const { app } = require('../app');
-const Cohort = require('../models/Cohort.model');
+const { app } = require('../src/app');
+const Cohort = require('../src/models/Cohort.model');
 
 describe('Cohort Routes', () => {
   beforeAll(async () => {

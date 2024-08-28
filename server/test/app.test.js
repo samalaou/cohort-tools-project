@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app } = require('../app'); 
+const { app } = require('../src/app'); 
 
 describe('Integration Tests', () => {
   test('should serve the docs.html file at /docs', async () => {

@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
-const { server } = require('./app');
+const { server } = require('./src/app');
+const { connectDb } = require('./config/database');
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://127.0.0.1:27017/cohort-tools-api');
+  await connectDb();
 });
 
 afterAll(async () => {

@@ -1,5 +1,5 @@
-const Student = require('../models/Student.model');
-const Cohort = require('../models/Cohort.model');
+const Student = require('../src/models/Student.model');
+const Cohort = require('../src/models/Cohort.model');
 
 describe('Student Model Test', () => {
   let cohortId;
