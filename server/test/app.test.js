@@ -1,11 +1,7 @@
 const request = require('supertest');
-const { app, server } = require('../app'); 
+const { app } = require('../app'); 
 
 describe('Integration Tests', () => {
-  afterAll((done) => {
-    server.close(done); 
-  });
-
   test('should serve the docs.html file at /docs', async () => {
     const res = await request(app).get('/docs');
     expect(res.status).toBe(200);
