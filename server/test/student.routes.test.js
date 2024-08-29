@@ -134,4 +134,12 @@ describe('Student Routes', () => {
     const deletedStudent = await Student.findById(student._id);
     expect(deletedStudent).toBeNull();
   });
+
+  it('should return 404 when student is not found', async () => {
+    const nonExistentId = '64a7f7e4b2a3c4d9f1e2a1bc';
+    const res = await request(app).get(`/api/students/${nonExistentId}`);
+    
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty('message', 'Student not found');
+  });
 });

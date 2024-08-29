@@ -93,4 +93,11 @@ describe('Cohort Routes', () => {
     const deletedCohort = await Cohort.findById(cohort._id);
     expect(deletedCohort).toBeNull();
   });
+
+  it('should return 404 when cohort is not found', async () => {
+    const nonExistentId = '64a7f7e4b2a3c4d9f1e2a1bc';
+    const res = await request(app).get(`/api/cohorts/${nonExistentId}`);
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty('message', 'Cohort not found');
+  });
 });

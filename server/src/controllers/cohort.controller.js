@@ -1,53 +1,62 @@
 const Cohort = require("../models/Cohort.model");
+const { NotFoundError } = require('../middleware/CustomError');
 
-const getAllCohorts = async (req, res) => {
+const getAllCohorts = async (req, res, next) => {
   try {
     const cohorts = await Cohort.find();
     res.json(cohorts);
   } catch (error) {
-    res.status(500).json({ message: 'Error getting cohorts', error });
+    next(error);
   }
 };
 
-const createCohort = async (req, res) => {
+const createCohort = async (req, res, next) => {
   try {
     const savedCohort = await Cohort.create(req.body);
     res.status(201).json(savedCohort);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating cohort', error });
+    next(error);
   }
 };
 
-const getCohortById = async (req, res) => {
+const getCohortById = async (req, res, next) => {
   const { cohortId } = req.params;
   try {
     const cohort = await Cohort.findById(cohortId);
+    if (!cohort) {
+      throw new NotFoundError("Cohort not found");
+    }
     res.json(cohort);
   } catch (error) {
-    res.status(500).json({ message: 'Error getting cohort', error });
+    next(error);
   }
 };
 
-const updateCohortById = async (req, res) => {
+const updateCohortById = async (req, res, next) => {
   const { cohortId } = req.params;
   try {
     const updatedCohort = await Cohort.findByIdAndUpdate(cohortId, req.body, { new: true });
+    if (!updatedCohort) {
+      throw new NotFoundError("Cohort not found");
+    }
     res.json(updatedCohort);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating cohort', error });
+    next(error);
   }
 };
 
-const deleteCohortById = async (req, res) => {
+const deleteCohortById = async (req, res, next) => {
   const { cohortId } = req.params;
   try {
-    await Cohort.findByIdAndDelete(cohortId);
+    const result = await Cohort.findByIdAndDelete(cohortId);
+    if (!result) {
+      throw new NotFoundError("Cohort not found");
+    }
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting cohort', error });
+    next(error);
   }
 };
-
 module.exports = {
   getAllCohorts,
   createCohort,

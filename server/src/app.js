@@ -23,17 +23,17 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
 // ROUTES - https://expressjs.com/en/starter/basic-routing.html
-const cohortRoutes = require("./routes/cohortRoutes");
-const studentRoutes = require("./routes/studentRoutes");
-
-app.use("/api/cohorts", cohortRoutes);
-app.use("/api/students", studentRoutes);
+app.use("/api/cohorts", require("./routes/cohort.routes"));
+app.use("/api/students", require("./routes/student.routes"));
 
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
+
+// Error Handling
+const errorHandler = require('./middleware/error-handling');
+app.use(errorHandler);
 
 // START SERVER
 const server = app.listen(PORT, () => {

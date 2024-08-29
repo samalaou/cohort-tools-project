@@ -5,7 +5,7 @@ const {
   getCohortById,
   updateCohortById,
   deleteCohortById,
-} = require("../controllers/cohortController");
+} = require("../controllers/cohort.controller");
 
 const router = express.Router();
 
