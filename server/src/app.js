@@ -1,9 +1,11 @@
+require('dotenv').config();
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const { connectDb } = require("../config/database");
 const PORT = 5005;
+const { isAuthenticated } = require("./middleware/jwt.middleware");
 
 connectDb()
 
@@ -24,12 +26,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // ROUTES - https://expressjs.com/en/starter/basic-routing.html
-app.use("/api/cohorts", require("./routes/cohort.routes"));
-app.use("/api/students", require("./routes/student.routes"));
+app.use("/api/cohorts", isAuthenticated, require("./routes/cohort.routes"));
+app.use("/api/students", isAuthenticated, require("./routes/student.routes"));
 
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
+
+app.use("/auth", require("./routes/auth.routes"));   
 
 // Error Handling
 const errorHandler = require('./middleware/error-handling');

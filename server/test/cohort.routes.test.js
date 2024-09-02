@@ -1,6 +1,9 @@
 const request = require('supertest');
 const { app } = require('../src/app');
 const Cohort = require('../src/models/Cohort.model');
+const { generateMockToken } = require('./test.utils');
+
+const mockToken = generateMockToken();
 
 describe('Cohort Routes', () => {
   beforeAll(async () => {
@@ -12,7 +15,9 @@ describe('Cohort Routes', () => {
   });
 
   it('should GET all cohorts', async () => {
-    const res = await request(app).get('/api/cohorts');
+    const res = await request(app)
+      .get('/api/cohorts')
+      .set('Authorization', `Bearer ${mockToken}`);
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
@@ -31,6 +36,7 @@ describe('Cohort Routes', () => {
 
     const res = await request(app)
       .post('/api/cohorts')
+      .set('Authorization', `Bearer ${mockToken}`)
       .send(newCohort);
 
     expect(res.statusCode).toBe(201);
@@ -50,7 +56,9 @@ describe('Cohort Routes', () => {
       totalHours: 200
     });
 
-    const res = await request(app).get(`/api/cohorts/${cohort._id}`);
+    const res = await request(app)
+      .get(`/api/cohorts/${cohort._id}`)
+      .set('Authorization', `Bearer ${mockToken}`)
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('cohortSlug', 'uxui2024');
   });
@@ -69,6 +77,7 @@ describe('Cohort Routes', () => {
 
     const res = await request(app)
       .put(`/api/cohorts/${cohort._id}`)
+      .set('Authorization', `Bearer ${mockToken}`)
       .send({ cohortName: 'Updated Cybersecurity 2024' });
 
     expect(res.statusCode).toBe(200);
@@ -87,7 +96,7 @@ describe('Cohort Routes', () => {
       totalHours: 300
     });
 
-    const res = await request(app).delete(`/api/cohorts/${cohort._id}`);
+    const res = await request(app).delete(`/api/cohorts/${cohort._id}`).set('Authorization', `Bearer ${mockToken}`);
     expect(res.statusCode).toBe(204);
 
     const deletedCohort = await Cohort.findById(cohort._id);
@@ -96,7 +105,7 @@ describe('Cohort Routes', () => {
 
   it('should return 404 when cohort is not found', async () => {
     const nonExistentId = '64a7f7e4b2a3c4d9f1e2a1bc';
-    const res = await request(app).get(`/api/cohorts/${nonExistentId}`);
+    const res = await request(app).get(`/api/cohorts/${nonExistentId}`).set('Authorization', `Bearer ${mockToken}`);
     expect(res.statusCode).toBe(404);
     expect(res.body).toHaveProperty('message', 'Cohort not found');
   });
